@@ -1,5 +1,6 @@
 from init import app
 from flask import jsonify
+from init.models import User, Joke, Ratings
 import requests
 
 @app.route("/")
