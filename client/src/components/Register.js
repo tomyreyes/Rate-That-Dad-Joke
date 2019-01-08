@@ -73,8 +73,11 @@ class Register extends Component {
           password
         })
         .then(response => {
-          console.log(response)
-          return
+          if (response.data.status === 200) {
+            return
+          } else if (response.data.status === 400) {
+            return alert(response.data.message)
+          } else return alert('Server Error')
         })
         .catch(error => {
           console.log(error)
@@ -82,7 +85,7 @@ class Register extends Component {
         })
     }
   }
-  
+
   render() {
     let validation = this.submitted
       ? this.validator.validate(this.state)
