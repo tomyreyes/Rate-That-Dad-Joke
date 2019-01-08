@@ -94,7 +94,7 @@ class Register extends Component {
     return (
       <div>
         <h1>Register</h1>
-        <Form>
+        <Form onSubmit={this.handleFormSubmit}>
           <FormGroup
             className={
               !validation.email.isInvalid

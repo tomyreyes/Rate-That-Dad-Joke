@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import FormValidator from './utils/FormValidator'
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap'
 import axios from 'axios'
+import { Redirect } from 'react-router-dom'
 
 class SignIn extends Component {
   constructor() {
@@ -39,7 +40,6 @@ class SignIn extends Component {
 
   handleInputChange = event => {
     event.preventDefault()
-
     this.setState({
       [event.target.name]: event.target.value
     })
@@ -51,7 +51,6 @@ class SignIn extends Component {
     const validation = this.validator.validate(this.state)
     this.setState({ validation })
     this.submitted = true
-
     if (validation.isValid) {
       axios
         .post('http://localhost:5000/login', {
@@ -59,16 +58,20 @@ class SignIn extends Component {
           password
         })
         .then(response => {
+        this.setState({
+            email: '',
+            password: ''
+        })
           if (response.data.status === 200) {
-            console.log(response.data.email)
+              console.log(response)
+            this.props.login()
             return
           } else if (response.data.status === 400) {
             return alert(response.data.message)
           } else return alert('Server Error')
         })
         .catch(error => {
-          console.log(error)
-          return
+          return alert(error)
         })
     }
   }
@@ -78,42 +81,46 @@ class SignIn extends Component {
       ? this.validator.validate(this.state)
       : this.state.validation
 
-    return (
-      <div>
-        <h1>Log In</h1>
-        <Form>
-          <FormGroup
-            className={
-              !validation.email.isInvalid
-                ? 'form-material form-material-success'
-                : ' form-material has-error'
-            }
-          >
-            <Label for="email">Email</Label>
-            <Input
-              type="email"
-              name="email"
-              id="email"
-              placeholder="Enter email"
-              onChange={this.handleInputChange}
-            />
-            <span> {validation.email.message}</span>
-          </FormGroup>
-          <FormGroup>
-            <Label for="password">Password</Label>
-            <Input
-              type="password"
-              name="password"
-              id="password"
-              placeholder="Enter a password"
-              onChange={this.handleInputChange}
-            />
-            <span> {validation.password.message}</span>
-          </FormGroup>
-          <Button onClick={this.handleFormSubmit}>Submit</Button>
-        </Form>
-      </div>
-    )
+    if (this.props.loggedIn) {
+      return <Redirect to="/" />
+    } else {
+      return (
+        <div>
+          <h1>Sign In</h1>
+          <Form onSubmit={this.handleFormSubmit}>
+            <FormGroup
+              className={
+                !validation.email.isInvalid
+                  ? 'form-material form-material-success'
+                  : ' form-material has-error'
+              }
+            >
+              <Label for="email">Email</Label>
+              <Input
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Enter email"
+                onChange={this.handleInputChange}
+              />
+              <span> {validation.email.message}</span>
+            </FormGroup>
+            <FormGroup>
+              <Label for="password">Password</Label>
+              <Input
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Enter a password"
+                onChange={this.handleInputChange}
+              />
+              <span> {validation.password.message}</span>
+            </FormGroup>
+            <Button onClick={this.handleFormSubmit}>Submit</Button>
+          </Form>
+        </div>
+      )
+    }
   }
 }
 

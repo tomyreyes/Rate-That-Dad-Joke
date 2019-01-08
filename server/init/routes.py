@@ -4,8 +4,7 @@ from init.models import User, Joke, Ratings
 import requests
 import json
 from flask_cors import CORS
-from flask_login import login_user, current_user
-
+from flask_login import login_user, current_user, logout_user
 
 CORS(app)
 
@@ -49,7 +48,6 @@ def register():
     else: 
         return jsonify({'status': 500})
 
-
 @app.route('/login', methods=['POST'])
 def login():
     if request.data:
@@ -57,9 +55,13 @@ def login():
         existing_user = User.query.filter_by(email=data['email']).first()
         if existing_user and bcrypt.check_password_hash(existing_user.password, data['password']):
             login_user(existing_user)
-            print(current_user)
             return jsonify({'status': 200, 'message': 'Log in succesful', 'email': current_user.email})
         return jsonify({'status': 500})
+
+@app.route('/logout', methods=['GET'])
+def logout():
+    logout_user()
+    return jsonify({'status': 200})
 
 def get_joke(url, headers, user, joke_ids, methods='GET'):
     try:
