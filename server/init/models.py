@@ -1,5 +1,10 @@
 from datetime import datetime
-from init import db 
+from init import db, login_manager
+from flask_login import UserMixin
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.get(int(user_id))
 
 class Ratings(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
@@ -9,7 +14,7 @@ class Ratings(db.Model):
     user = db.relationship("User", back_populates="jokes")
     joke = db.relationship("Joke", back_populates="users")
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(50), unique=True, nullable=False) #find a way to check if email
     password = db.Column(db.String(50), nullable=False) #find way to hide this 
