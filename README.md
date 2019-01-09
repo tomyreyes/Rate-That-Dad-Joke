@@ -2,7 +2,7 @@
 
 This is a Full Stack Application built with Flask and React. This is my first time using Flask, and Python for that matter. 
 This application allows users to register, sign-in and rate dad jokes coming from [icanhazdadjoke's API](https://icanhazdadjoke.com/api). 
-User's are also able to see dad jokes they have rated in the past, as well as the rating they gave the joke. React and Flask are able to communicate with each other through the REST API I created. 
+User's are also able to see dad jokes they have rated in the past, as well as the rating they provided. React and Flask are able to communicate with each other through the REST API I created. 
 
 
 ### Client Notes: 
