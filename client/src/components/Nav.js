@@ -11,9 +11,14 @@ class Nav extends Component {
             <Link to="/">Home</Link>
           </li>
           {user ? (
-            <li>
-              <button onClick={this.props.logOut}>Log Out</button>
-            </li>
+            <React.Fragment>
+              <li>
+                <Link to="/summary">Summary</Link>
+              </li>
+              <li>
+                <button onClick={this.props.logOut}>Log Out</button>
+              </li>
+            </React.Fragment>
           ) : (
             <React.Fragment>
               <li>

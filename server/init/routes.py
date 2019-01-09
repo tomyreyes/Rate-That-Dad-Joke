@@ -70,8 +70,20 @@ def login():
 def getUser():
     token = request.args.get('token')
     data = jwt.decode(token, app.config['SECRET_KEY'])
-    print(data['email'])
+    print(data)
     return jsonify({'status': 200, 'email': data['email']})
+
+@app.route('/get-summary', methods=['POST'])
+def getSummary():
+    if request.data:
+        data = json.loads(request.data)
+        user = User.query.filter_by(email=data['user']).first()
+        ratings_list = list(map(lambda assoc: assoc.rating, user.jokes))
+        jokes_id_list = list(map(lambda assoc: assoc.joke_id, user.jokes))
+        jokes_list = list(map(lambda joke_id: Joke.query.filter_by(id=joke_id).first().joke, jokes_id_list))
+        return jsonify({'status': 200, 'ratings_list': ratings_list, 'jokes_list': jokes_list})
+    else:
+        return jsonify({'status': 500})
 
 def get_unrepeated_joke(url, headers, user, joke_ids, methods='GET'):
     try:

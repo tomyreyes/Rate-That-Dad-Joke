@@ -33,13 +33,20 @@ class Home extends Component {
   componentDidMount() {
     const jwt = getJWT()
     if (!jwt) {
-      this.props.history.push('sign-in')
+      return this.props.history.push('sign-in')
     }
 
     this.props.getUser(jwt)
     return this.getJoke()
   }
 
+  componentDidUpdate() {
+      const { user } = this.props
+      if(!user) {
+          return this.props.history.push('sign-in')
+      }
+
+  }
   rateJoke = e => {
     e.preventDefault()
     const { user } = this.props

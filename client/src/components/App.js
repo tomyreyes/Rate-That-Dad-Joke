@@ -4,6 +4,7 @@ import Nav from './Nav'
 import Home from './Home'
 import SignIn from './Sign-In'
 import Register from './Register'
+import Summary from './Summary'
 import axios from 'axios'
 
 class App extends Component {
@@ -17,10 +18,10 @@ class App extends Component {
         axios.get(`http://localhost:5000/get-user?token=${token}`)
             .then(response => {
                 if(response.data.status === 200) {
-                    return this.setState({user: response.data.email})
+                    this.setState({user: response.data.email})
                 }
             }).catch(error => {
-                localStorage.removeItem('jwt')
+                alert(error)
             })
     }
 
@@ -39,6 +40,7 @@ class App extends Component {
             <Route exact path="/" render={props => <Home {...props} user={user} getUser={this.getUser}/>} />
             <Route path="/sign-in" render={props => <SignIn {...props} user={user} />} />
             <Route path="/register" render={props => <Register {...props} />} />
+            <Route path='/summary' render={props => <Summary {...props} user={user} getUser={this.getUser}/>} />
           </Switch>
         </div>
       </BrowserRouter>

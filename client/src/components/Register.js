@@ -74,7 +74,7 @@ class Register extends Component {
         })
         .then(response => {
           if (response.data.status === 200) {
-            return
+            return this.props.history.push('/sign-in')
           } else if (response.data.status === 400) {
             return alert(response.data.message)
           } else return alert('Server Error')
