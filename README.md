@@ -1,8 +1,8 @@
 # Rate That Dad Joke
 
 This is a Full Stack Application built with Flask and React. This is my first time using Flask, and Python for that matter. 
-React and Flask are able to communicate with each other through the REST API I created. This application allows users to register, sign-in and rate dad jokes coming from [icanhazdadjoke's API](https://icanhazdadjoke.com/api). 
-User's are also able to see dad jokes they have rated in the past, as well as the rating they gave the joke. 
+This application allows users to register, sign-in and rate dad jokes coming from [icanhazdadjoke's API](https://icanhazdadjoke.com/api). 
+User's are also able to see dad jokes they have rated in the past, as well as the rating they gave the joke. React and Flask are able to communicate with each other through the REST API I created. 
 
 
 ### Client Notes: 
@@ -13,8 +13,11 @@ User login sessions are handled through a JWT I generate in the Flask Server tha
 For my database, I am using flask-sqlalchemy.
 
 The database is structured into three models as follows:
+
 User - users who have registered are added into the database. 
+
 Joke - each joke rated is added to the database. 
+
 Ratings - this is an Association Object responsible for the many to many relationship between User and Joke. 
 I am using a model for Ratings because I wanted to store ratings, as well as both foreign keys. 
 
@@ -23,12 +26,12 @@ To prevent users from receiving the same joke, I query the current user from the
 
 ## Future Additions:
 Due to time constraints, I did not get into nearly enough of what I wanted to do with this project. 
-I would have liked to structure the server using [Blueprints](http://flask.pocoo.org/docs/1.0/blueprints/). Right now, I just have a large routes.py. I think this can be refactored to focus more on separating everything by concerns. I also wanted create tests for the routes I created and separate implementation code from my route end-point. Finally, I would have loved to spend more time learning Python as a language. 
+I would have liked to structure the server using [Blueprints](http://flask.pocoo.org/docs/1.0/blueprints/). Right now, I just have a large routes.py. I think I can do a better job separating the server by concerns. I also wanted create tests for the routes I created and separate implementation code from my route end-point. Finally, I would have loved to spend more time learning Python as a language. 
 
 
 ### Application Structure
 
-Client - I separated the components into a component directory. In the component directory there are also two directors, styles and utils. 
+Client - I separated the components into a component directory. In the component directory there are also two directories, styles and utils. 
 ```
 ├── client
     ├── public
@@ -50,7 +53,7 @@ Client - I separated the components into a component directory. In the component
     └── .gitignore
 ```
 
-Server - I structured the server as a package called init to be a bit more organized. 
+Server - I structured the server as a package. 
 ```
 ├── server
     ├── init
@@ -100,10 +103,10 @@ python run.py - should be set to localhost:5000
 ```
 
 ### Bonus
-To predict if the user would like the next incoming joke I would try to make a guess based on the type of joke the user has liked in the past.
+To predict if the user would like the incoming joke I would try to make a guess based on the type of joke the user has liked in the past.
 I think the easiest way to do this would be to make a guess based on the type of genre of comedy the person likes, the level of wittiness in a joke etc. However, this would rely heavily on the API one is using to retrieve the jokes categorizing jokes by genre/type. 
 
-Although I have no experience with machine learning and AI I think this could be done through analyzing the jokes themselves that users like. For instance, if a user prefers jokes that are shorter and more to the point perhaps this can be detected. 
+Although I have no experience with machine learning and AI I think this could be done through analyzing the jokes users like directly. For instance, if a user prefers jokes that are shorter and more to the point perhaps this can be detected.
 
 ## This application was built using:
 
