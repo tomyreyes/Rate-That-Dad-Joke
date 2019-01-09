@@ -49,6 +49,7 @@ Server - I structured the server as a package called init to be a bit more organ
 ### Running this project 
 
 Client Pre-equisites: [Node.js and NPM](https://nodejs.org/en/download/)
+
 Server Prerequisites: [Python 3](https://docs.python-guide.org/starting/install3/osx/) and [Pipenv](https://pipenv.readthedocs.io/en/latest/)
 
 Before you begin make sure to: 
@@ -58,38 +59,23 @@ Open project in code editor
 ```
 
 Client set-up:
-
-Step 1: 
 ```
+from root directory:
 cd client
-```
-
-Step 2:
-```
 npm install
-```
-Step 3:
-```
 npm start - should be set to localhost:3000
 ```
 
 Server set-up:
-Step 1:
 ```
+from root directory:
 cd server
-```
-
-Step 2: 
-```
 pipenv install
-```
-
-Step 3: 
-```
 pipenv shell
-```
-
-Step 4:
-```
 python run.py - should be set to localhost:5000
 ```
+### Bonus
+To predict if the user would like the next incoming joke I would try to make a guess based on the type of joke the user has liked in the past.
+I think the easiest way to do this would be to make a guess based on the type of genre of comedy the person likes, the level of wittiness in a joke etc. However, this would rely heavily on the API one is using to retrieve the jokes categorizing jokes by genre/type. 
+
+Although I have no experience with machine learning and AI I think this could be done through analyzing the jokes themselves that users like. For instance, if a user prefers jokes that are shorter and more to the point perhaps this can be detected. 
