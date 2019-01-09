@@ -25,7 +25,7 @@ class User(db.Model, UserMixin):
         return f"User('{self.email}')"
     
 class Joke(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(30), primary_key=True)
     joke = db.Column(db.String(500), unique=True, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     users = db.relationship("Ratings", back_populates="joke")

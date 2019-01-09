@@ -12,24 +12,32 @@ CORS(app)
 def send_joke():
     url = 'https://icanhazdadjoke.com/'
     headers = {'Accept': 'application/json'}
-    user = User.query.filter_by(id=data['user_id']).first()
-    joke_ids = list(map(lambda joke: joke.joke_id, user.jokes ))
-    return get_joke(url, headers, user, joke_ids)
+    data = json.loads(request.data)
+    if request.data: 
+        if data['user'] and data['id']:
+            user = User.query.filter_by(email=data['user']).first()
+            joke_ids = list(map(lambda joke: joke.joke_id, user.jokes))
+            return get_unrepeated_joke(url, headers, user, joke_ids)
+        else: 
+            return get_joke(url, headers)
+    else: 
+        return jsonify({'status': 400, 'message': 'Server cannot get a joke. Please Try Again'})
 
 @app.route('/rate-joke', methods=['POST'])
 def rate_joke():
     if request.data:
         data = json.loads(request.data)
-        user = User.query.filter_by(id=data['user_id']).first()
+        user = User.query.filter_by(email=data['user']).first()
         ratedJoke = Joke(id=data['joke_id'], joke=data['joke'])
         rating = Ratings(rating=data['rating'])
+        print(rating)
         rating.joke = ratedJoke
         user.jokes.append(rating)
         db.session.add_all([ratedJoke, rating])
         db.session.commit()
         return jsonify({'status': 200})
     else: 
-        return jsonify({'status': 400, 'message': 'Server has not received data.'})
+        return jsonify({'status': 400, 'message': 'Server has not received data. Please Try Again'})
 
 @app.route('/user-registration', methods=['POST'])
 def register():
@@ -65,7 +73,7 @@ def getUser():
     print(data['email'])
     return jsonify({'status': 200, 'email': data['email']})
 
-def get_joke(url, headers, user, joke_ids, methods='GET'):
+def get_unrepeated_joke(url, headers, user, joke_ids, methods='GET'):
     try:
         joke = requests.get(url, headers=headers)
         joke_object = joke.json()
@@ -79,3 +87,11 @@ def get_joke(url, headers, user, joke_ids, methods='GET'):
     except requests.exceptions.HTTPError as err:
         return jsonify({'message': err})
 
+def get_joke(url, headers, methods='GET'):
+    try:
+        joke = requests.get(url, headers=headers)
+        joke_object = joke.json()
+        joke.raise_for_status()
+        return jsonify({'id': joke_object['id'],  'joke': joke_object['joke']})
+    except requests.exceptions.HTTPError as err:
+        return jsonify({'message': err})
