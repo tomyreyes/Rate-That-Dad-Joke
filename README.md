@@ -21,7 +21,7 @@ Joke - each joke rated is added to the database.
 Ratings - this is an Association Object responsible for the many to many relationship between User and Joke. 
 I am using a model for Ratings because I wanted to store ratings, as well as both foreign keys. 
 
-To prevent users from receiving the same joke, I query the current user from the database and check check the relationship between the User and Joke.  If the joke's id coming from [icanhazdadjoke's API](https://icanhazdadjoke.com/api) can be found, I make another request to the API. 
+To prevent users from receiving the same joke, I query the current user from the database and check the relationship between the User and Joke.  If the joke's id coming from [icanhazdadjoke's API](https://icanhazdadjoke.com/api) can be found, I make another request to the API. 
 
 
 ## Future Additions:
