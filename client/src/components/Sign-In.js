@@ -58,13 +58,10 @@ class SignIn extends Component {
           password
         })
         .then(response => {
-        this.setState({
-            email: '',
-            password: ''
-        })
           if (response.data.status === 200) {
-              console.log(response)
-            this.props.login()
+            localStorage.setItem('jwt', response.data.token)
+            this.setState({user: response.data.email})
+            this.props.history.push('/')
             return
           } else if (response.data.status === 400) {
             return alert(response.data.message)

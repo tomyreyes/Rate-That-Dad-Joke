@@ -2,24 +2,32 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 
 class Nav extends Component {
-    
-    render() {
-        return (
-            <nav>
-                <ul>
-                    <li>
-                        <Link to="/">Home</Link>
-                    </li>
-                    <li>
-                        <Link to="/sign-in">Sign-In</Link>
-                    </li>
-                    <li>
-                        <Link to="/register">Register</Link>
-                    </li>
-                </ul>
-            </nav>
-        );
-    }
+  render() {
+    const { user } = this.props
+    return (
+      <nav>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          {user ? (
+            <li>
+              <button onClick={this.props.logOut}>Log Out</button>
+            </li>
+          ) : (
+            <React.Fragment>
+              <li>
+                <Link to="/sign-in">Sign-In</Link>
+              </li>
+              <li>
+                <Link to="/register">Register</Link>
+              </li>
+            </React.Fragment>
+          )}
+        </ul>
+      </nav>
+    )
+  }
 }
 
 export default Nav

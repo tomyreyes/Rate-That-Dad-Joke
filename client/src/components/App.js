@@ -1,48 +1,43 @@
 import React, { Component } from 'react'
-import { BrowserRouter,  Redirect, Route, Switch } from 'react-router-dom'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import Nav from './Nav'
 import Home from './Home'
 import SignIn from './Sign-In'
 import Register from './Register'
-import axios from 'axios';
+import axios from 'axios'
 
 class App extends Component {
   constructor() {
     super()
     this.state = {
-      loggedIn: false,
+      user: null
     }
   }
-    login = () => {
-        this.setState({
-            loggedIn: true
-        })
-    }
-
-    logout = () => {
-        this.setState({
-            loggedIn: false
-        })
-        return axios.get('http://localhost:5000/login')
+    getUser = (token) => {
+        axios.get(`http://localhost:5000/get-user?token=${token}`)
             .then(response => {
                 if(response.data.status === 200) {
-                    return 
+                    return this.setState({user: response.data.email})
                 }
+            }).catch(error => {
+                localStorage.removeItem('jwt')
             })
-            .catch(error => {
-                return alert(error)
-            })
+    }
+
+    logOut = () => {
+        localStorage.removeItem('jwt')
+        return this.setState({user: null})
     }
 
   render() {
-      const { loggedIn } = this.state 
+      const { user } = this.state 
     return (
       <BrowserRouter>
         <div>
-          <Nav loggedIn={loggedIn}/>
+          <Nav user={user} logOut={this.logOut}/>
           <Switch>
-            <PrivateRoute exact path="/" component={Home} loggedIn={loggedIn}/> 
-            <Route path="/sign-in" render={props => <SignIn {...props} loggedIn={loggedIn} login={this.login} />} />
+            <Route exact path="/" render={props => <Home {...props} user={user} getUser={this.getUser}/>} />
+            <Route path="/sign-in" render={props => <SignIn {...props} user={user} />} />
             <Route path="/register" render={props => <Register {...props} />} />
           </Switch>
         </div>
@@ -51,24 +46,4 @@ class App extends Component {
   }
 }
 
-const PrivateRoute = ({ component: Component, loggedIn, ...rest,  }) => {
-    console.log(loggedIn)
-    return (
-        <Route
-            {...rest}
-            render={props =>
-                loggedIn ? (
-                    <Component {...props} />
-                ) : (
-                        <Redirect
-                            to={{
-                                pathname: "/sign-in",
-                                state: { from: props.location }
-                            }}
-                        />
-                    )
-            }
-        />
-    );
-}
 export default App

@@ -4,7 +4,7 @@ from init.models import User, Joke, Ratings
 import requests
 import json
 from flask_cors import CORS
-from flask_login import login_user, current_user, logout_user
+import jwt
 
 CORS(app)
 
@@ -54,14 +54,16 @@ def login():
         data = json.loads(request.data)
         existing_user = User.query.filter_by(email=data['email']).first()
         if existing_user and bcrypt.check_password_hash(existing_user.password, data['password']):
-            login_user(existing_user)
-            return jsonify({'status': 200, 'message': 'Log in succesful', 'email': current_user.email})
+            token = jwt.encode({'email': data['email']}, app.config['SECRET_KEY'])
+            return jsonify({'status': 200, 'message': 'Log in succesful', 'email': data['email'], 'token': token.decode('UTF-8')})
         return jsonify({'status': 500})
 
-@app.route('/logout', methods=['GET'])
-def logout():
-    logout_user()
-    return jsonify({'status': 200})
+@app.route('/get-user', methods=['GET'])
+def getUser():
+    token = request.args.get('token')
+    data = jwt.decode(token, app.config['SECRET_KEY'])
+    print(data['email'])
+    return jsonify({'status': 200, 'email': data['email']})
 
 def get_joke(url, headers, user, joke_ids, methods='GET'):
     try:
@@ -76,3 +78,4 @@ def get_joke(url, headers, user, joke_ids, methods='GET'):
             return jsonify({'id': joke_object['id'],  'joke': joke_object['joke']})
     except requests.exceptions.HTTPError as err:
         return jsonify({'message': err})
+

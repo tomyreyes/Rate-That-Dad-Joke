@@ -80,8 +80,8 @@ class Register extends Component {
           } else return alert('Server Error')
         })
         .catch(error => {
-          console.log(error)
-          return
+         
+            return alert(error)
         })
     }
   }
