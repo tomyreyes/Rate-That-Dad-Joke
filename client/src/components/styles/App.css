@@ -1,0 +1,25 @@
+.container {
+    text-align: center;
+   
+}
+
+.container .title {
+    margin-top: 50px;
+
+}
+
+.container .jokes {
+    margin-top: 100px;
+}
+
+.container .btn-group{
+    margin-top: 50px
+}
+
+.like-btn {
+    width: 96px;
+}
+
+.form-feedback {
+    color: #dc3545
+}

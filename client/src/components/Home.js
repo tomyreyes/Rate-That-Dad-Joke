@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button } from 'reactstrap'
+import { Button, Container } from 'reactstrap'
 import { getJWT } from '../components/utils/JWT'
 import axios from 'axios'
 
@@ -32,10 +32,10 @@ class Home extends Component {
   }
 
   generateJokes = () => {
-      this.setState({
-          initialGeneration:true
-      })
-      this.getJoke()
+    this.setState({
+      initialGeneration: true
+    })
+    this.getJoke()
   }
 
   componentDidMount() {
@@ -75,28 +75,42 @@ class Home extends Component {
     const { currentJoke, initialGeneration } = this.state
 
     return (
-      <div>
-        <h1>Rate That Dad Joke</h1>
+      <Container>
+        <h1 className="title">Rate That Dad Joke</h1>
+        <h5>Try not to laugh too hard...</h5>
         {!initialGeneration && (
-          <Button onClick={this.generateJokes}>Generate Joke</Button>
+          <Button color="primary" onClick={this.generateJokes}>
+            Generate Joke
+          </Button>
         )}
 
         {currentJoke && initialGeneration && (
-          <div>
+          <div className="jokes">
             <h3>{currentJoke}</h3>
-            <Button name="Like" onClick={this.rateJoke}>
-              Like
-            </Button>
-            <Button name="Don't Like" onClick={this.rateJoke}>
-              Don't Like
-            </Button>
-            <Button name="Don't Care" onClick={this.rateJoke}>
-              Don't Care
-            </Button>
+            <span className="btn-group">
+              <Button
+                className="like-btn"
+                color="success"
+                name="Like"
+                onClick={this.rateJoke}
+              >
+                Like
+              </Button>
+              <Button color="danger" name="Don't Like" onClick={this.rateJoke}>
+                Don't Like
+              </Button>
+              <Button
+                color="secondary"
+                name="Don't Care"
+                onClick={this.rateJoke}
+              >
+                Don't Care
+              </Button>
+            </span>
           </div>
-        ) }
+        )}
         {initialGeneration && !currentJoke && <h5>Loading....</h5>}
-      </div>
+      </Container>
     )
   }
 }

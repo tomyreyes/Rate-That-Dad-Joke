@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { getJWT } from '../components/utils/JWT'
 import axios from 'axios'
+import { Container, ListGroup, ListGroupItem } from 'reactstrap'
 
 class Summary extends Component {
   constructor() {
@@ -19,6 +20,7 @@ class Summary extends Component {
       })
       .then(response => {
         if (response.data.status === 200) {
+          console.log(response.data.ratings_list)
           this.setState({
             ratings: response.data.ratings_list,
             jokes: response.data.jokes_list
@@ -55,18 +57,28 @@ class Summary extends Component {
     if (jokes) {
       summary = jokes.map((joke, index) => {
         return (
-          <li key={index}>
-            {joke} - {ratings[index]}
-          </li>
+          <ListGroupItem
+            key={joke}
+            color={
+              ratings[index] === "Like"
+                ? "success"
+                : ratings[index] === "Don't Like"
+                ? "danger"
+                : "secondary"
+            }
+          >
+            {joke} <b>Rating:</b> {ratings[index]}
+          </ListGroupItem>
         )
       })
     }
 
     return (
-      <div>
-        <h1>Summary</h1>
-        {jokes ? <ul>{summary}</ul> : <h1>Loading </h1>}
-      </div>
+      <Container>
+        <h1 className="title">Summary</h1>
+        <h5>Here is the history of the jokes you have rated.</h5>
+        {jokes ? <ListGroup>{summary}</ListGroup> : <h1>Loading </h1>}
+      </Container>
     )
   }
 }

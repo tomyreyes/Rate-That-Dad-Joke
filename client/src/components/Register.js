@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import FormValidator from './utils/FormValidator'
-import { Button, Form, FormGroup, Label, Input } from 'reactstrap'
+import { Button, Container, Form, FormGroup, Label, Input } from 'reactstrap'
 import axios from 'axios'
 
 class Register extends Component {
@@ -80,8 +80,7 @@ class Register extends Component {
           } else return alert('Server Error')
         })
         .catch(error => {
-         
-            return alert(error)
+          return alert(error)
         })
     }
   }
@@ -92,16 +91,10 @@ class Register extends Component {
       : this.state.validation
 
     return (
-      <div>
-        <h1>Register</h1>
+      <Container>
+        <h1 className="title">Register</h1>
         <Form onSubmit={this.handleFormSubmit}>
-          <FormGroup
-            className={
-              !validation.email.isInvalid
-                ? 'form-material form-material-success'
-                : ' form-material has-error'
-            }
-          >
+          <FormGroup>
             <Label for="email">Email</Label>
             <Input
               type="email"
@@ -110,7 +103,7 @@ class Register extends Component {
               placeholder="Enter email"
               onChange={this.handleInputChange}
             />
-            <span> {validation.email.message}</span>
+            <span className="form-feedback"> {validation.email.message}</span>
           </FormGroup>
           <FormGroup>
             <Label for="password">Password</Label>
@@ -121,7 +114,10 @@ class Register extends Component {
               placeholder="Enter a password"
               onChange={this.handleInputChange}
             />
-            <span> {validation.password.message}</span>
+            <span className="form-feedback">
+              {' '}
+              {validation.password.message}
+            </span>
           </FormGroup>
           <FormGroup>
             <Label for="passwordConfirmation">Password</Label>
@@ -132,11 +128,16 @@ class Register extends Component {
               placeholder="Confirm your password"
               onChange={this.handleInputChange}
             />
-            <span> {validation.passwordConfirmation.message}</span>
+            <span className="form-feedback">
+              {' '}
+              {validation.passwordConfirmation.message}
+            </span>
           </FormGroup>
-          <Button onClick={this.handleFormSubmit}>Submit</Button>
+          <Button color="success" onClick={this.handleFormSubmit}>
+            Submit
+          </Button>
         </Form>
-      </div>
+      </Container>
     )
   }
 }

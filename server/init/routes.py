@@ -64,6 +64,8 @@ def login():
         if existing_user and bcrypt.check_password_hash(existing_user.password, data['password']):
             token = jwt.encode({'email': data['email']}, app.config['SECRET_KEY'])
             return jsonify({'status': 200, 'message': 'Log in succesful', 'email': data['email'], 'token': token.decode('UTF-8')})
+        else: 
+            return jsonify({'status': 400, 'message': 'Incorrect Password. Please Try Again.'})
         return jsonify({'status': 500})
 
 @app.route('/get-user', methods=['GET'])

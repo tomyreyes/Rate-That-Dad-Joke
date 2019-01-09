@@ -1,38 +1,44 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
+import { Button, Navbar, NavbarBrand, NavItem, Nav } from 'reactstrap'
 
-class Nav extends Component {
-  render() {
-    const { user } = this.props
-    return (
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          {user ? (
+const Navigation = (props) => {
+  return (
+    <nav>
+      <Navbar color="light" light expand="md">
+        <NavbarBrand href="/">Rate That Dad Joke</NavbarBrand>
+        <Nav className="ml-auto" navbar>
+          {props.user ? (
             <React.Fragment>
-              <li>
-                <Link to="/summary">Summary</Link>
-              </li>
-              <li>
-                <button onClick={this.props.logOut}>Log Out</button>
-              </li>
+              <NavItem>
+                <Link to="/summary">
+                  <Button color="info">Summary</Button>
+                </Link>
+              </NavItem>
+              <NavItem>
+                <Button color="warning" onClick={props.logOut}>
+                  Log Out
+                </Button>
+              </NavItem>
             </React.Fragment>
           ) : (
             <React.Fragment>
-              <li>
-                <Link to="/sign-in">Sign-In</Link>
-              </li>
-              <li>
-                <Link to="/register">Register</Link>
-              </li>
+              <NavItem>
+                <Link to="/sign-in">
+                  <Button color="info">Sign-In</Button>
+                </Link>
+              </NavItem>
+              <NavItem>
+                <Link to="/register">
+                  <Button color="warning">Register</Button>
+                </Link>
+              </NavItem>
             </React.Fragment>
           )}
-        </ul>
-      </nav>
-    )
-  }
+        </Nav>
+      </Navbar>
+    </nav>
+  )
 }
 
-export default Nav
+export default Navigation

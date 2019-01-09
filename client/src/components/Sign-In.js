@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import FormValidator from './utils/FormValidator'
-import { Button, Form, FormGroup, Label, Input } from 'reactstrap'
+import { Container, Button, Form, FormGroup, Label, Input } from 'reactstrap'
 import axios from 'axios'
 import { Redirect } from 'react-router-dom'
 
@@ -32,7 +32,8 @@ class SignIn extends Component {
       email: '',
       password: '',
       passwordConfirmation: '',
-      validation: this.validator.valid()
+      validation: this.validator.valid(),
+      errorMessage: null
     }
 
     this.submitted = false
@@ -60,11 +61,12 @@ class SignIn extends Component {
         .then(response => {
           if (response.data.status === 200) {
             localStorage.setItem('jwt', response.data.token)
-            this.setState({user: response.data.email})
-            this.props.history.push('/')
-            return
+            this.setState({ user: response.data.email })
+            return this.props.history.push('/')
           } else if (response.data.status === 400) {
-            return alert(response.data.message)
+            return this.setState({
+              errorMessage: response.data.message
+            })
           } else return alert('Server Error')
         })
         .catch(error => {
@@ -74,50 +76,47 @@ class SignIn extends Component {
   }
 
   render() {
+    const { errorMessage } = this.state
     let validation = this.submitted
       ? this.validator.validate(this.state)
       : this.state.validation
 
-    if (this.props.loggedIn) {
-      return <Redirect to="/" />
-    } else {
-      return (
-        <div>
-          <h1>Sign In</h1>
-          <Form onSubmit={this.handleFormSubmit}>
-            <FormGroup
-              className={
-                !validation.email.isInvalid
-                  ? 'form-material form-material-success'
-                  : ' form-material has-error'
-              }
-            >
-              <Label for="email">Email</Label>
-              <Input
-                type="email"
-                name="email"
-                id="email"
-                placeholder="Enter email"
-                onChange={this.handleInputChange}
-              />
-              <span> {validation.email.message}</span>
-            </FormGroup>
-            <FormGroup>
-              <Label for="password">Password</Label>
-              <Input
-                type="password"
-                name="password"
-                id="password"
-                placeholder="Enter a password"
-                onChange={this.handleInputChange}
-              />
-              <span> {validation.password.message}</span>
-            </FormGroup>
-            <Button onClick={this.handleFormSubmit}>Submit</Button>
-          </Form>
-        </div>
-      )
-    }
+    return (
+      <Container>
+        <h1 className="title">Sign In</h1>
+        <Form>
+          <FormGroup>
+            <Label for="email">Email</Label>
+            <Input
+              type="email"
+              name="email"
+              id="email"
+              placeholder="Enter email"
+              onChange={this.handleInputChange}
+            />
+            <span className="form-feedback"> {validation.email.message}</span>
+          </FormGroup>
+          <FormGroup>
+            <Label for="password">Password</Label>
+            <Input
+              type="password"
+              name="password"
+              id="password"
+              placeholder="Enter a password"
+              onChange={this.handleInputChange}
+            />
+            <span className="form-feedback">
+              {' '}
+              {validation.password.message}
+            </span>
+            <span className="form-feedback">{errorMessage}</span>
+          </FormGroup>
+          <Button color="primary" type="submit" onClick={this.handleFormSubmit}>
+            Submit
+          </Button>
+        </Form>
+      </Container>
+    )
   }
 }
 
