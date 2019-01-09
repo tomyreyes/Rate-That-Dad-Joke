@@ -9,7 +9,8 @@ class Home extends Component {
     this.state = {
       start: false,
       currentJoke: null,
-      id: null
+      id: null,
+      initialGeneration: false
     }
   }
 
@@ -30,59 +31,71 @@ class Home extends Component {
       .catch(error => alert(error))
   }
 
+  generateJokes = () => {
+      this.setState({
+          initialGeneration:true
+      })
+      this.getJoke()
+  }
+
   componentDidMount() {
     const jwt = getJWT()
     if (!jwt) {
       return this.props.history.push('sign-in')
     }
-
     this.props.getUser(jwt)
-    return this.getJoke()
   }
 
   componentDidUpdate() {
-      const { user } = this.props
-      if(!user) {
-          return this.props.history.push('sign-in')
-      }
-
+    const { user } = this.props
+    if (!user) {
+      return this.props.history.push('sign-in')
+    }
   }
   rateJoke = e => {
     e.preventDefault()
     const { user } = this.props
     const { id, currentJoke } = this.state
-    axios.post('http://localhost:5000/rate-joke', {
+    axios
+      .post('http://localhost:5000/rate-joke', {
         user,
         joke: currentJoke,
         joke_id: id,
         rating: e.target.name
-    })
-    .then(response => {
-        if(response.data.status === 200) {
-            return this.getJoke()
-        }
-        else 
-        return alert(response.data.message)
-    })
-    .catch(error => alert(error))
+      })
+      .then(response => {
+        if (response.data.status === 200) {
+          return this.getJoke()
+        } else return alert(response.data.message)
+      })
+      .catch(error => alert(error))
   }
 
   render() {
-    const { currentJoke } = this.state
+    const { currentJoke, initialGeneration } = this.state
 
     return (
       <div>
         <h1>Rate That Dad Joke</h1>
-        {currentJoke ? <h3>{currentJoke}</h3> : <h5>Loading...</h5>}
-        <Button name="Like" onClick={this.rateJoke}>
-          Like
-        </Button>
-        <Button name="Don't Like" onClick={this.rateJoke}>
-          Don't Like
-        </Button>
-        <Button name="Don't Care" onClick={this.rateJoke}>
-          Don't Care
-        </Button>
+        {!initialGeneration && (
+          <Button onClick={this.generateJokes}>Generate Joke</Button>
+        )}
+
+        {currentJoke && initialGeneration && (
+          <div>
+            <h3>{currentJoke}</h3>
+            <Button name="Like" onClick={this.rateJoke}>
+              Like
+            </Button>
+            <Button name="Don't Like" onClick={this.rateJoke}>
+              Don't Like
+            </Button>
+            <Button name="Don't Care" onClick={this.rateJoke}>
+              Don't Care
+            </Button>
+          </div>
+        ) }
+        {initialGeneration && !currentJoke && <h5>Loading....</h5>}
       </div>
     )
   }
