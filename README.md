@@ -102,12 +102,6 @@ pipenv shell
 python run.py - should be set to localhost:5000
 ```
 
-### Bonus
-To predict if the user would like the incoming joke I would try to make a guess based on the type of joke the user has liked in the past.
-I think the easiest way to do this would be to make a guess based on the type of genre of comedy the person likes, the level of wittiness in a joke etc. However, this would rely heavily on the API one is using to retrieve the jokes categorizing jokes by genre/type. 
-
-Although I have no experience with machine learning and AI I think this could be done through analyzing the jokes users like directly. For instance, if a user prefers jokes that are shorter and more to the point perhaps this can be detected.
-
 ## This application was built using:
 
 - [React](https://reactjs.org/)
